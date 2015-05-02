@@ -12,7 +12,7 @@ class Posts {
 		$this->posts = new Post();
 	}
 
-	function index($id) {
+	public function index($id) {
 		var_dump($id);
 		die();
 	}
