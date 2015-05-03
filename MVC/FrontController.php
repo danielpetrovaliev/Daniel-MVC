@@ -24,7 +24,7 @@ class FrontController {
 	private $method = null;
 	/**
 	 *
-	 * @var \MVC\Rourets\iRouter;
+	 * @var \MVC\Routers\iRouter;
 	 */
 	private $router = null;
 	private function __construct() {
@@ -73,9 +73,9 @@ class FrontController {
 			if ($_params[1]) {
 				$this->method = strtolower($_params[1]);
 				unset($_params[0], $_params[1]);
-				$input->setGet(array_values($_params));
-			} else {
-				$this->method = $this->getDefaultMethod();
+                $input->setGet(array_values($_params));
+            } else {
+                $this->method = $this->getDefaultMethod();
 			}
 		} else {
 			$this->controller = $this->getDefaultController();

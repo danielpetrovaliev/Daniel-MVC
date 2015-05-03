@@ -5,19 +5,16 @@ namespace Controllers;
 use Models\Post;
 use Models\User;
 
-class Home {
+class Home extends BaseController {
 	function __construct() {
-		$this->view = \MVC\View::getInstance();
-		$this->users = new User();
+        parent::__construct();
+		//$this->users = new User();
 		$this->posts = new Post();
 	}
 
 	function index() {
 		$data['posts'] = $this->posts->getAllPosts();
-		$this->view->appendToLayout('header', 'inc.header');
-		$this->view->appendToLayout('footer', 'inc.footer');
-		$this->view->appendToLayout('posts', 'home.posts');
-		$this->view->appendToLayout('side-bar', 'inc.side-bar');
-		$this->view->display('home.index', $data, false);
+        $this->view->appendToLayout('posts', 'post.posts_template');
+		$this->view->display('post.posts', $data, false);
 	}
 }

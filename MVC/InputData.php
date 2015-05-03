@@ -75,7 +75,7 @@ class InputData {
             }
             return $this->_cookies[$name];
         }
-        return $default;        
+        return $default;
     }
 
     /**

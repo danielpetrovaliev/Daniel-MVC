@@ -6,6 +6,7 @@ $cnf['namespaces']['Views'] = 'C:\xampp\htdocs\Blog\trunk\Blog-System\views';
 $cnf['namespaces']['Models'] = 'C:\xampp\htdocs\Blog\trunk\Blog-System\models';
 
 $cnf['viewsDirectory'] = 'C:\xampp\htdocs\Blog\trunk\Blog-System\views';
+$cnf['displayExceptions'] = true;
 
 $cnf['session']['autostart'] = true;
 $cnf['session']['type'] = 'native';
