@@ -151,7 +151,7 @@ class App {
 			$view->display('errors.' . $error);
 		} catch (\Exception $exc) {
 			\MVC\Common::headerStatus($error);
-			echo '<h1>' . $error . '</h1>';
+			echo '<h1>' . $exc . '</h1>';
 			exit;
 		}
 	}

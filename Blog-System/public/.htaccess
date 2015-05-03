@@ -1,6 +1,9 @@
 <IfModule mod_rewrite.c>
-    RewriteEngine on
-    RewriteCond %{REQUEST_FILENAME} !-d
-    RewriteCond %{REQUEST_FILENAME} !-f
-    RewriteRule  ^ index.php    [L]
+     RewriteEngine On
+     # Route everything except /content/* and favicon.ico to index.php
+     RewriteCond %{REQUEST_URI} !^/css/.*$
+     RewriteCond %{REQUEST_URI} !^/fonts/.*$
+     RewriteCond %{REQUEST_URI} !^/js/.*$
+     RewriteCond %{REQUEST_URI} !^/favicon\.ico$
+     RewriteRule ^ index.php
  </IfModule>

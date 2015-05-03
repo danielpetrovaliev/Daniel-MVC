@@ -1,11 +1,11 @@
 <?php
 $cnf['default_controller'] = 'Home';
 $cnf['default_method'] = 'index';
-$cnf['namespaces']['Controllers'] = 'C:\xampp\htdocs\Php-projects\Daniel-MVC\Blog-System\controllers';
-$cnf['namespaces']['Views'] = 'C:\xampp\htdocs\Php-projects\Daniel-MVC\Blog-System\views';
-$cnf['namespaces']['Models'] = 'C:\xampp\htdocs\Php-projects\Daniel-MVC\Blog-System\models';
+$cnf['namespaces']['Controllers'] = 'C:\xampp\htdocs\Blog\trunk\Blog-System\controllers';
+$cnf['namespaces']['Views'] = 'C:\xampp\htdocs\Blog\trunk\Blog-System\views';
+$cnf['namespaces']['Models'] = 'C:\xampp\htdocs\Blog\trunk\Blog-System\models';
 
-$cnf['viewsDirectory'] = 'C:\xampp\htdocs\Php-projects\Daniel-MVC\Blog-System\views';
+$cnf['viewsDirectory'] = 'C:\xampp\htdocs\Blog\trunk\Blog-System\views';
 
 $cnf['session']['autostart'] = true;
 $cnf['session']['type'] = 'native';

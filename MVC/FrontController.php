@@ -95,10 +95,6 @@ class FrontController {
 		$f = $this->ns . '\\' . ucfirst($this->controller);
 		$newControoler = new $f();
 		$newControoler->{$this->method}();
-
-		var_dump($this->controller);
-		var_dump($this->method);
-		die();
 	}
 
 	public function getDefaultController() {
