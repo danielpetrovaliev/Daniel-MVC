@@ -19,10 +19,10 @@
 <!-- /.container -->
 
 <!-- jQuery -->
-<script src="../../public/js/jquery.js"></script>
+<script type="application/javascript" src="/js/jquery.js"></script>
 
 <!-- Bootstrap Core JavaScript -->
-<script src="../../public/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="/js/bootstrap.min.js"></script>
 
 </body>
 
