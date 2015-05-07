@@ -27,7 +27,6 @@
 </head>
 
 <body>
-
 <!-- Navigation -->
 <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
     <div class="container">
@@ -51,6 +50,24 @@
                 <li>
                     <a href="#">Contact</a>
                 </li>
+            </ul>
+
+            <ul class="nav navbar-nav navbar-right">
+                <?php if($this->___session->username != null): ?>
+                    <li>
+                        <a href="#">Hello <?= htmlspecialchars($this->___session->username) ?> !</a>
+                    </li>
+                    <li>
+                        <a href=" <?= $this->getBaseUrl() . 'users/logout' ?> ">Logout</a>
+                    </li>
+                <?php else: ?>
+                    <li>
+                        <a href=" <?= $this->getBaseUrl() . 'users/login' ?> ">Login</a>
+                    </li>
+                    <li>
+                        <a href=" <?= $this->getBaseUrl() . 'users/register' ?> ">Register</a>
+                    </li>
+                <?php endif; ?>
             </ul>
         </div>
         <!-- /.navbar-collapse -->

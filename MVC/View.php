@@ -20,8 +20,9 @@ class View {
 	private $___extension = '.php';
 	private $___layoutParts = array();
 	private $___layoutData = array();
+    private $___session;
 	private function __construct() {
-
+        $this->___session = \MVC\App::getInstance()->getSession();
 		$this->___viewPath = \MVC\App::getInstance()->getConfig()->app['viewsDirectory'];
 		if ($this->___viewPath == null) {
 			$this->___viewPath = realpath('../views/');

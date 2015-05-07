@@ -1,6 +1,7 @@
 <!-- Blog Entries Column -->
 <div class="col-md-8">
-    <?php foreach ($this->___data['posts'] as $post): ?>
+    <?php if(is_array($this->___data['posts']) && count($this->___data['posts']) > 0): ?>
+        <?php foreach ($this->___data['posts'] as $post): ?>
 
         <h2>
             <a href="<?= $this->getBaseUrl() . "posts/get/" . $post['post_id'] ?>"><?= htmlspecialchars($post['post_title']) ?></a>
@@ -26,7 +27,9 @@
         <hr>
 
     <?php endforeach; ?>
-
+    <?php else: ?>
+        <h1>No results</h1>
+    <?php endif; ?>
     <!-- Pager -->
     <ul class="pager">
         <!-- TODO Pagination -->
