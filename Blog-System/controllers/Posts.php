@@ -93,6 +93,9 @@ class Posts extends BaseController {
             $tagsSeparatedByComma = substr($tagsSeparatedByComma, 0, count($tagsSeparatedByComma) - 3);
 
             $this->data['posts'][$key]['tags'] = $tagsSeparatedByComma;
+
+            // set length of content
+            $this->data['posts'][$key]['post_content'] = substr($this->data['posts'][$key]['post_content'], 0, 300) . '...';
         }
 
         $this->view->appendToLayout("posts", "post.posts_template");
@@ -119,6 +122,9 @@ class Posts extends BaseController {
             $tagsSeparatedByComma = substr($tagsSeparatedByComma, 0, count($tagsSeparatedByComma) - 3);
 
             $this->data['posts'][$key]['tags'] = $tagsSeparatedByComma;
+
+            // set length of content
+            $this->data['posts'][$key]['post_content'] = substr($this->data['posts'][$key]['post_content'], 0, 300) . '...';
         }
 
         $this->view->appendToLayout("posts", "post.posts_template");

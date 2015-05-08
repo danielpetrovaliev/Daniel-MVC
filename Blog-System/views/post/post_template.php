@@ -28,7 +28,7 @@ $comments = $this->___data['comments'];
 
     <hr>
     <div style="margin-bottom: 15px;">
-        Tags: <i><?= $post['tags'] ?></i>
+        Tags: <i><?= htmlspecialchars($post['tags']) ?></i>
     </div>
     <!-- Blog Comments -->
     <!-- Comments Form -->

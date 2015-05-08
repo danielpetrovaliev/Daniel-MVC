@@ -18,7 +18,7 @@
         </i>
         <p><span class="glyphicon glyphicon-time"></span> Posted on <?= $post['post_created'] ?></p>
         <div>
-            Tags: <i><?= $post['tags'] ?></i>
+            Tags: <i><?= htmlspecialchars($post['tags']) ?></i>
         </div>
         <hr>
         <p">
