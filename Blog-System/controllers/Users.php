@@ -31,6 +31,7 @@ class Users extends BaseController{
             $currUser = $this->users->getUser($username);
             if($currUser != null && password_verify($password, $currUser['password'])){
                 $this->session->__set('username', $currUser['username']);
+                $this->session->__set('user_id', $currUser['id']);
                 $this->session->__set('is_admin', $currUser['is_admin']);
                 $this->redirect("/");
             }
@@ -70,6 +71,7 @@ class Users extends BaseController{
                     $currUser = $this->users->getUserById($id);
                     if($currUser != null){
                         $this->session->__set('username', $currUser['username']);
+                        $this->session->__set('user_id', $currUser['id']);
                         $this->session->__set('is_admin', $currUser['is_admin']);
                         $this->redirect("/");
                     } else{

@@ -18,7 +18,37 @@ class Tag extends BaseModel{
                 JOIN tags t on t.id = tt.tag_id
                 ORDER BY cnt DESC;";
 
+
         $result = $this->db->prepare($sql)->execute()->fetchAllAssoc();
+        return $result;
+    }
+
+    public function getByTitle($title){
+        $sql = "SELECT id,
+              title
+            FROM tags
+            WHERE title = ?";
+
+        $result = $this->db->prepare($sql)->execute(array($title))->fetchRowAssoc();
+        return $result;
+    }
+
+    public function add($title){
+        $sql = "INSERT INTO tags(title) VALUES(?)";
+
+        $result = $this->db->prepare($sql)->execute(array($title))->getLastInsertId();
+        return $result;
+    }
+
+    public function getByPost($post_id){
+        $sql = "SELECT t.id,
+                t.title
+            FROM posts p
+            RIGHT JOIN posts_tags pt ON pt.post_id = p.id
+            RIGHT JOIN tags t ON pt.tag_id = t.id
+            WHERE p.id = ?";
+
+        $result = $this->db->prepare($sql)->execute(array($post_id))->fetchAllAssoc();
         return $result;
     }
 }

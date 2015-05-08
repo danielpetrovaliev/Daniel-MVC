@@ -21,15 +21,15 @@ $comments = $this->___data['comments'];
 
     <hr>
 
-    <hr>
-
     <!-- Post Content -->
     <p>
         <?= htmlspecialchars($post['post_content']) ?>
     </p>
 
     <hr>
-
+    <div style="margin-bottom: 15px;">
+        Tags: <i><?= $post['tags'] ?></i>
+    </div>
     <!-- Blog Comments -->
     <!-- Comments Form -->
     <div class="well">

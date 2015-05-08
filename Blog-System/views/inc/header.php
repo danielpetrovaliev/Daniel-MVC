@@ -2,7 +2,6 @@
 <html lang="en">
 
 <head>
-
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -44,6 +43,11 @@
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav">
+                <?php if($this->___session->is_admin == 1): ?>
+                    <li>
+                        <a href=" <?= $this->getBaseUrl() . 'posts/add' ?> ">Add article</a>
+                    </li>
+                <?php endif; ?>
                 <li>
                     <a href="#">About</a>
                 </li>

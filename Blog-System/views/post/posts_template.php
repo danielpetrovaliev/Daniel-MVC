@@ -17,8 +17,11 @@
             </p>
         </i>
         <p><span class="glyphicon glyphicon-time"></span> Posted on <?= $post['post_created'] ?></p>
+        <div>
+            Tags: <i><?= $post['tags'] ?></i>
+        </div>
         <hr>
-        <p>
+        <p">
             <?= htmlspecialchars($post['post_content']) ?>
         </p>
         <a class="btn btn-primary" href=" <?= $this->getBaseUrl() . "posts/get/" . $post['post_id'] ?> ">Read More <span

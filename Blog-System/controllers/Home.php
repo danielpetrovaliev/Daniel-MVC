@@ -29,6 +29,18 @@ class Home extends BaseController {
 
 	function index() {
         $this->data['posts'] = $this->posts->getAllPosts();
+        foreach ($this->data['posts'] as $key => $post) {
+            $tagsByPost = $this->tags->getByPost($post['post_id']);
+            $tagsSeparatedByComma = '';
+            foreach ($tagsByPost as $tag) {
+                $tagsSeparatedByComma = $tagsSeparatedByComma . $tag['title'] . ', ';
+            }
+            // remove last comma and space
+            $tagsSeparatedByComma = substr($tagsSeparatedByComma, 0, count($tagsSeparatedByComma) - 3);
+
+            $this->data['posts'][$key]['tags'] = $tagsSeparatedByComma;
+        }
+
         $this->view->appendToLayout('posts', 'post.posts_template');
 		$this->view->display('post.posts', $this->data, false);
 	}

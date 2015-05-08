@@ -13,7 +13,8 @@ class Post extends BaseModel {
 			    u.username as username,
 			    p.visits as visits
 			FROM posts p
-			JOIN users u ON p.user_id = u.id";
+			JOIN users u ON p.user_id = u.id
+			ORDER BY post_created DESC";
 
 		$result = $this->db->prepare($sql)->execute()->fetchAllAssoc();
 		return $result;
@@ -93,5 +94,28 @@ class Post extends BaseModel {
 
         $result = $this->db->prepare($sql)->execute(array($visits, $id))->getAffectedRows();
         return $result;
+    }
+
+    public function add($title, $text, $user_id){
+        $sql = "INSERT INTO posts(title, content, user_id) VALUES(?, ?, ?)";
+
+        $result = $this->db->prepare($sql)->execute(array($title, $text, $user_id))->getLastInsertId();
+        return $result;
+    }
+
+    public function addTagRelation($post_id, $tag_id){
+        $sql = "INSERT INTO posts_tags(post_id, tag_id) VALUES(?, ?)";
+
+        $result = $this->db->prepare($sql)->execute(array($post_id, $tag_id))->getLastInsertId();
+        return $result;
+    }
+
+    public function isTagRelationExist($post_id, $tag_id){
+        $sql = "SELECT id
+            FROM posts_tags
+            WHERE post_id = ? AND tag_id = ?";
+
+        $result = $this->db->prepare($sql)->execute(array($post_id, $tag_id))->fetchRowNum();
+        return $result > 0 ? TRUE : FALSE;
     }
 }
