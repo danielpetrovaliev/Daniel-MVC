@@ -15,15 +15,18 @@ class Users extends BaseController{
      * @var User Model
      */
     private $users;
+    private $validation;
 
     function __construct(){
         parent::__construct();
         $this->users = new User();
-
+        $this->validation = new \MVC\Validation();
     }
 
     public function login(){
-
+        if($this->session->username != null){
+            $this->redirect("/");
+        }
         if($this->input->hasPost('submit')){
             $username = $this->input->post('username');
             $password = $this->input->post('password');
@@ -34,9 +37,9 @@ class Users extends BaseController{
                 $this->session->__set('user_id', $currUser['id']);
                 $this->session->__set('is_admin', $currUser['is_admin']);
                 $this->redirect("/");
+            } else{
+                $this->data['error'] = "User with this username and password does not exist.";
             }
-
-            // TODO fail login
         }
 
         $this->view->appendToLayout("login", "user.login_template");
@@ -52,20 +55,23 @@ class Users extends BaseController{
     }
 
     public function register(){
+        if($this->session->username != null){
+            $this->redirect("/");
+        }
         if($this->input->hasPost('submit')){
             $username = $this->input->post('username');
             $password = $this->input->post('password');
             $confirmPassword = $this->input->post('confirmPassword');
 
-            if($username != '' && $password != '' && $confirmPassword != ''){
+            if($username != '' && $password != '' && $confirmPassword != '' && $password == $confirmPassword){
                 $userFromDb =  $this->users->getUser($username);
 
                 if($userFromDb == null){
                     $id = $this->users->register($username, $password);
 
                     if($id == null){
+                        $error = "Theare are problem with user creating.";
                         return;
-                        // TODO validaion
                     }
 
                     $currUser = $this->users->getUserById($id);
@@ -75,19 +81,23 @@ class Users extends BaseController{
                         $this->session->__set('is_admin', $currUser['is_admin']);
                         $this->redirect("/");
                     } else{
+                        $error = "Theare are problem with user creating.";
                         return;
-                        // TODO VALIDATION
                     }
 
                 } else {
-                    // TODO validation
+                    $error = "This username is not available.";
                 }
             } else{
-                // TODO validation
+                $error = "All fields are required.";
+                if($password != $confirmPassword){
+                    $error = "Passwords don't match.";
+                }
             }
 
-
-
+            if(isset($error) && $error != ''){
+                $this->data['error'] = $error;
+            }
         }
 
         $this->view->appendToLayout("register", "user.register_template");

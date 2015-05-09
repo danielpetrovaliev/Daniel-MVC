@@ -51,4 +51,20 @@ class Tag extends BaseModel{
         $result = $this->db->prepare($sql)->execute(array($post_id))->fetchAllAssoc();
         return $result;
     }
+
+    /**
+     * @param $post_id
+     * @return string
+     */
+    public function getSeparatedTagsByPost($post_id){
+        $tagsByPost = $this->getByPost($post_id);
+        $tagsSeparatedByComma = '';
+        foreach ($tagsByPost as $tag) {
+            $tagsSeparatedByComma = $tagsSeparatedByComma . $tag['title'] . ', ';
+        }
+        // remove last comma and space
+        $tagsSeparatedByComma = substr($tagsSeparatedByComma, 0, count($tagsSeparatedByComma) - 3);
+
+        return $tagsSeparatedByComma;
+    }
 }

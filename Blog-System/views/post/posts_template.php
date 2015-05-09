@@ -33,15 +33,22 @@
     <?php else: ?>
         <h1>No results</h1>
     <?php endif; ?>
-    <!-- Pager -->
-    <ul class="pager">
-        <!-- TODO Pagination -->
-        <li class="previous">
-            <a href="#">&larr; Older</a>
-        </li>
-        <li class="next">
-            <a href="#">Newer &rarr;</a>
-        </li>
-    </ul>
 
+    <?php if($this->___data['posts_pages_count'] > 1): ?>
+        <ul class="pagination">
+            <?php for($i = 1; $i <= $this->___data['posts_pages_count']; $i++): ?>
+                <?php
+                $attr = "";
+                if($_GET['page'] == $i){
+                    $attr = 'class="active"';
+                } elseif($_GET['page'] == null && $i <= 1){
+                    $attr = 'class="active"';
+                }
+                ?>
+                <li <?= $attr ?>>
+                    <a href="<?= $_SERVER['PHP_SELF'] . '?page=' . $i ?>"><?= $i ?></a>
+                </li>
+            <?php endfor; ?>
+        </ul>
+    <?php endif; ?>
 </div>

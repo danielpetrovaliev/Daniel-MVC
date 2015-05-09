@@ -4,7 +4,10 @@ namespace Models;
 
 class Post extends BaseModel {
 
-	public function getAllPosts() {
+	public function getAllPosts($limit, $offset) {
+        $limit = intval($limit);
+        $offset = intval($offset);
+
 		$sql = "SELECT p.id as post_id,
 				p.title as post_title,
 			    p.content as post_content,
@@ -14,11 +17,21 @@ class Post extends BaseModel {
 			    p.visits as visits
 			FROM posts p
 			JOIN users u ON p.user_id = u.id
-			ORDER BY post_created DESC";
+			ORDER BY post_created DESC
+			LIMIT $limit OFFSET $offset";
 
 		$result = $this->db->prepare($sql)->execute()->fetchAllAssoc();
 		return $result;
 	}
+
+    public function getAllPostsCount() {
+        $sql = "SELECT COUNT(p.id) as cnt
+			FROM posts p
+			JOIN users u ON p.user_id = u.id";
+
+        $result = $this->db->prepare($sql)->execute()->fetchRowAssoc();
+        return $result['cnt'];
+    }
 
     public function getSidebarSortedPosts(){
         $sql = "SELECT p.id as post_id,
@@ -51,7 +64,10 @@ class Post extends BaseModel {
         return $result;
     }
 
-    public function getPostsByTag($id){
+    public function getPostsByTag($id, $limit, $offset){
+        $limit = intval($limit);
+        $offset = intval($offset);
+
         $sql = "SELECT p.id as post_id,
             p.title as post_title,
             p.content as post_content,
@@ -63,13 +79,29 @@ class Post extends BaseModel {
         JOIN users u ON p.user_id = u.id
         RIGHT JOIN posts_tags pt ON p.id = pt.post_id
         RIGHT JOIN tags t ON t.id = pt.tag_id
-        WHERE t.id = ?";
+        WHERE t.id = ?
+        LIMIT $limit OFFSET $offset";
 
         $result = $this->db->prepare($sql)->execute(array($id))->fetchAllAssoc();
         return $result;
     }
 
-    public function getPostsByTagTitle($tagQuery){
+    public function getPostsByTagCount($id){
+        $sql = "SELECT COUNT(p.id) as cnt
+        FROM posts p
+        JOIN users u ON p.user_id = u.id
+        RIGHT JOIN posts_tags pt ON p.id = pt.post_id
+        RIGHT JOIN tags t ON t.id = pt.tag_id
+        WHERE t.id = ?";
+
+        $result = $this->db->prepare($sql)->execute(array($id))->fetchRowAssoc();
+        return $result['cnt'];
+    }
+
+    public function getPostsByTagTitle($tagQuery, $limit, $offset){
+        $limit = intval($limit);
+        $offset = intval($offset);
+
         $sql = "SELECT p.id as post_id,
                 p.title as post_title,
                 p.content as post_content,
@@ -81,10 +113,23 @@ class Post extends BaseModel {
             JOIN users u ON u.id = p.user_id
             LEFT JOIN posts_tags pt ON p.id = pt.post_id
             LEFT JOIN tags t ON pt.tag_id = t.id
+            WHERE t.title like '%" . $tagQuery . "%'
+            LIMIT $limit OFFSET $offset";
+
+        $result = $this->db->prepare($sql)->execute()->fetchAllAssoc();
+        return $result;
+    }
+
+    public function getCountPostsByTagTitle($tagQuery){
+        $sql = "SELECT COUNT(p.id) as cnt
+            FROM posts p
+            JOIN users u ON u.id = p.user_id
+            LEFT JOIN posts_tags pt ON p.id = pt.post_id
+            LEFT JOIN tags t ON pt.tag_id = t.id
             WHERE t.title like '%" . $tagQuery . "%'";
 
-        $result = $this->db->prepare($sql)->execute(array($tagQuery))->fetchAllAssoc();
-        return $result;
+        $result = $this->db->prepare($sql)->execute(array($tagQuery))->fetchRowAssoc();
+        return $result['cnt'];
     }
 
     public function increaseVisits($id, $visits){

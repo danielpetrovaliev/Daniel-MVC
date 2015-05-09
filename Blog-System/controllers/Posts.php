@@ -37,6 +37,25 @@ class Posts extends BaseController {
         $this->data['most_common_tags'] = $this->tags->getMostCommonTags();
 	}
 
+    function index() {
+        $perPage = 2;
+        $page = $_GET['page'] != null ? $_GET['page'] : 1;
+        $offset = ((int)$page * (int)$perPage) - $perPage;
+
+        $this->data['posts'] = $this->posts->getAllPosts($perPage, $offset);
+        foreach ($this->data['posts'] as $key => $post) {
+            $this->data['posts'][$key]['tags'] = $this->tags->getSeparatedTagsByPost($post['post_id']);
+
+            // set length of content
+            $this->data['posts'][$key]['post_content'] = substr($this->data['posts'][$key]['post_content'], 0, 300) . '...';
+        }
+
+        $this->data['posts_pages_count'] = $this->getPagesCount($this->posts->getAllPostsCount(), $perPage);
+
+        $this->view->appendToLayout('posts', 'post.posts_template');
+		$this->view->display('post.posts', $this->data, false);
+	}
+
     // Get by id
 	public function get() {
 		// Get first param from url
@@ -53,19 +72,9 @@ class Posts extends BaseController {
             die();
         }
 
-        $tagsByPost = $this->tags->getByPost($this->data['post']['post_id']);
-        $tagsSeparatedByComma = '';
-        foreach ($tagsByPost as $tag) {
-            $tagsSeparatedByComma = $tagsSeparatedByComma . $tag['title'] . ', ';
-        }
-        // remove last comma and space
-        $tagsSeparatedByComma = substr($tagsSeparatedByComma, 0, count($tagsSeparatedByComma) - 3);
-
-        $this->data['post']['tags'] = $tagsSeparatedByComma;
-
-        $this->increaseVisits($id);
-
+        $this->data['post']['tags'] = $this->tags->getSeparatedTagsByPost($this->data['post']['post_id']);
         $this->data['comments'] = $this->comments->getCommentsForPost($id);
+        $this->increaseVisits($id);
 
         $this->view->appendToLayout("post", "post.post_template");
         $this->view->display("post.post", $this->data, false);
@@ -79,20 +88,18 @@ class Posts extends BaseController {
     }
 
     public function getPostsByTagTitle(){
+        $perPage = 2;
+        $page = $_GET['page'] != null ? $_GET['page'] : 1;
+        $offset = ((int)$page * (int)$perPage) - $perPage;
+
         $tagQuery = $_GET['tagQuery'];
 
-        $this->data['posts'] = $this->posts->getPostsByTagTitle($tagQuery);
+        $this->data['posts'] = $this->posts->getPostsByTagTitle($tagQuery, $perPage, $offset);
+
+        $this->data['posts_pages_count'] = $this->getPagesCount($this->posts->getCountPostsByTagTitle($tagQuery), $perPage);
 
         foreach ($this->data['posts'] as $key => $post) {
-            $tagsByPost = $this->tags->getByPost($post['post_id']);
-            $tagsSeparatedByComma = '';
-            foreach ($tagsByPost as $tag) {
-                $tagsSeparatedByComma = $tagsSeparatedByComma . $tag['title'] . ', ';
-            }
-            // remove last comma and space
-            $tagsSeparatedByComma = substr($tagsSeparatedByComma, 0, count($tagsSeparatedByComma) - 3);
-
-            $this->data['posts'][$key]['tags'] = $tagsSeparatedByComma;
+            $this->data['posts'][$key]['tags'] = $this->tags->getSeparatedTagsByPost($post['post_id']);
 
             // set length of content
             $this->data['posts'][$key]['post_content'] = substr($this->data['posts'][$key]['post_content'], 0, 300) . '...';
@@ -110,18 +117,16 @@ class Posts extends BaseController {
             die();
         }
 
-        $this->data['posts'] = $this->posts->getPostsByTag($id);
+        $perPage = 2;
+        $page = $_GET['page'] != null ? $_GET['page'] : 1;
+        $offset = ((int)$page * (int)$perPage) - $perPage;
+
+
+        $this->data['posts'] = $this->posts->getPostsByTag($id, $perPage, $offset);
+        $this->data['posts_pages_count'] = $this->getPagesCount($this->posts->getPostsByTagCount($id), $perPage);
 
         foreach ($this->data['posts'] as $key => $post) {
-            $tagsByPost = $this->tags->getByPost($post['post_id']);
-            $tagsSeparatedByComma = '';
-            foreach ($tagsByPost as $tag) {
-                $tagsSeparatedByComma = $tagsSeparatedByComma . $tag['title'] . ', ';
-            }
-            // remove last comma and space
-            $tagsSeparatedByComma = substr($tagsSeparatedByComma, 0, count($tagsSeparatedByComma) - 3);
-
-            $this->data['posts'][$key]['tags'] = $tagsSeparatedByComma;
+            $this->data['posts'][$key]['tags'] = $this->tags->getSeparatedTagsByPost($post['post_id']);
 
             // set length of content
             $this->data['posts'][$key]['post_content'] = substr($this->data['posts'][$key]['post_content'], 0, 300) . '...';
@@ -138,6 +143,7 @@ class Posts extends BaseController {
         }
 
         if($this->input->hasPost('submit')){
+            $errors[] = array();
             $title = $this->input->post('title');
             $text = $this->input->post('text');
             $tags = $this->input->post('tags');
@@ -189,5 +195,19 @@ class Posts extends BaseController {
 
         $this->view->appendToLayout("add", "post.add_template");
         $this->view->display("post.add", $this->data, false);
+    }
+
+    private function getPagesCount($postsCount, $perPage){
+        $pages = 0;
+
+        if($postsCount <= $perPage){
+            $pages = 1;
+        } elseif($postsCount % $perPage != 0){
+            $pages = $postsCount / $perPage + 1;
+        } else{
+            $pages = $postsCount / $perPage;
+        }
+
+        return $pages;
     }
 }

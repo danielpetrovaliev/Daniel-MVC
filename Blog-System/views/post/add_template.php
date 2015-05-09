@@ -1,4 +1,11 @@
 <div class="col-md-10 col-md-offset-1">
+    <?php if(isset($this->___data['error'])): ?>
+        <div class="alert alert-dismissible alert-danger">
+            <button type="button" class="close" data-dismiss="alert">×</button>
+            <h4>Error!</h4>
+            <p><?= $this->___data['error']; ?></p>
+        </div>
+    <?php endif; ?>
     <form class="form-horizontal" method="post" action=" <?= $this->getbaseUrl() . 'posts/add' ?> ">
         <fieldset>
             <legend>Articles</legend>

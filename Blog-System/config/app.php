@@ -1,5 +1,5 @@
 <?php
-$cnf['default_controller'] = 'Home';
+$cnf['default_controller'] = 'Posts';
 $cnf['default_method'] = 'index';
 $cnf['namespaces']['Controllers'] = 'C:\xampp\htdocs\Blog\trunk\Blog-System\controllers';
 $cnf['namespaces']['Views'] = 'C:\xampp\htdocs\Blog\trunk\Blog-System\views';

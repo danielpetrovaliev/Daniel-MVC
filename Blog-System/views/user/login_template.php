@@ -1,5 +1,12 @@
 <!--Pulling Awesome Font -->
 <div class="row">
+    <?php if(isset($this->___data['error'])): ?>
+        <div class="alert alert-dismissible alert-danger">
+            <button type="button" class="close" data-dismiss="alert">×</button>
+            <h4>Error!</h4>
+            <p><?= $this->___data['error']; ?></p>
+        </div>
+    <?php endif; ?>
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
     <link rel="stylesheet" href="/css/my-styles.css"/>
     <div class="login-container col-md-12">
