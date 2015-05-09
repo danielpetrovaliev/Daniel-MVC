@@ -143,46 +143,48 @@ class Posts extends BaseController {
         }
 
         if($this->input->hasPost('submit')){
-            $errors[] = array();
+            $pattern = "";
             $title = $this->input->post('title');
             $text = $this->input->post('text');
             $tags = $this->input->post('tags');
             $author_id = $this->session->user_id;
 
-            // TODO Validate tag format and other fields
+            if($title != "" && $text != "" && $tags != ''){
+                $post_id = $this->posts->add($title, $text, $author_id);
 
-            $post_id = $this->posts->add($title, $text, $author_id);
+                if($post_id > 0){
+                    $tagsAsArray = explode(', ', $tags);
+                    foreach($tagsAsArray as $tag){
+                        $tagFromDb = $this->tags->getByTitle($tag);
 
-            if($post_id > 0){
-                $tagsAsArray = explode(', ', $tags);
-                foreach($tagsAsArray as $tag){
-                    $tagFromDb = $this->tags->getByTitle($tag);
-
-                    // Tag exist
-                    if($tagFromDb != null){
-                        // Realation not exist
-                        if(!$this->posts->isTagRelationExist($post_id, $tagFromDb['id'])){
-                            $relation_id = $this->posts->addTagRelation($post_id, $tagFromDb['id']);
-                            if(!$relation_id > 0){
-                                $error = "Problem with relation creating.";
-                            }
-                        }
-                    } else{
-                        $tag_id = $this->tags->add($tag);
-
-                        // When tag is created
-                        if($tag_id > 0){
-                            $relation_id = $this->posts->addTagRelation($post_id, $tag_id);
-                            if(!$relation_id > 0){
-                                $error = "Problem with relations between posts and tags";
+                        // Tag exist
+                        if($tagFromDb != null){
+                            // Realation not exist
+                            if(!$this->posts->isTagRelationExist($post_id, $tagFromDb['id'])){
+                                $relation_id = $this->posts->addTagRelation($post_id, $tagFromDb['id']);
+                                if(!$relation_id > 0){
+                                    $error = "Problem with relation creating.";
+                                }
                             }
                         } else{
-                            $error = "Problem with tag creating.";
+                            $tag_id = $this->tags->add($tag);
+
+                            // When tag is created
+                            if($tag_id > 0){
+                                $relation_id = $this->posts->addTagRelation($post_id, $tag_id);
+                                if(!$relation_id > 0){
+                                    $error = "Problem with relations between posts and tags";
+                                }
+                            } else{
+                                $error = "Problem with tag creating.";
+                            }
                         }
                     }
+                } else{
+                    $error = "Problem with post creating.";
                 }
             } else{
-                $error = "Problem with post creating.";
+                $error = "All fields are required.";
             }
 
             if(isset($error) && $error != ''){
@@ -190,7 +192,6 @@ class Posts extends BaseController {
             } else{
                 $this->redirect("/");
             }
-
         }
 
         $this->view->appendToLayout("add", "post.add_template");
